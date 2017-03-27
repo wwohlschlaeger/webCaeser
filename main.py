@@ -16,15 +16,30 @@
 #
 import webapp2, string
 
+def build_page(textarea_content):
+    header =("<DOCTYPE= html>" +
+            "<html>" + "<head>" +
+            "<h2>Web Caeser</h2>" + "</head>" + "<body>")
+    footer = ("</body" + "</html>")
+    rot_message = "<label>Rotate message by how many characters:</label>" + "<input type='number' name='rotateChar'/>"
+    textarea =("<label>Type the message:</label><br>" "<textarea name='message1' style='margin: 8px; height: 100px; width: 400px'>"
+                + textarea_content + "</textarea>")
+    submit = "<input type='submit'/>"
+    form1= "<form method='post'>" + textarea + "<br>" + rot_message + "<br>" + submit + "</form>"
+
+    return header + form1
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        message = 'Hellooooo world!'
-        encrypted_message=encrypt(message,13)
+        content = build_page("")
+        self.response.write(content)
 
-        textarea = "<textarea>" + encrypted_message + "</textarea>"
-        submit = "<input type='submit'/>"
-        form1= "<form>" + textarea + "<br>" +submit + "</form>"
-        self.response.write(form1)
+    def post(self):
+        rot_num= self.request.get("rotateChar")
+        message1= self.request.get('message1')
+        encrypted_message= encrypt(message1,rot_num)
+        content = build_page(encrypted_message)
+        self.response.write(content)
 
 def encrypt(exp,pos):
     temp = ""
