@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2, string
+import webapp2, string, cgi
 
 def build_page(textarea_content):
     header =("<DOCTYPE= html>" +
@@ -38,6 +38,7 @@ class MainHandler(webapp2.RequestHandler):
         rot_num= self.request.get("rotateChar")
         message1= self.request.get('message1')
         encrypted_message= encrypt(message1,rot_num)
+        escaped_message = cgi.escape(encrypted_message)
         content = build_page(encrypted_message)
         self.response.write(content)
 
@@ -63,7 +64,16 @@ def encrypt(exp,pos):
                     temp = temp+lower[x+pos]
         else:
             temp = temp + exp[i]
+    #escape_html(temp)
+
     return temp
+
+def escape_html(s):
+    s.replace('>','&gt;')
+    s.replace('<','&lt')
+    s.replace('''"''','&quot;')
+    s.replace('&','&amp,')
+    return s
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
