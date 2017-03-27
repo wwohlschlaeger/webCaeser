@@ -18,9 +18,13 @@ import webapp2, string
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        message = 'Helloooooooo world!'
+        message = 'Hellooooo world!'
         encrypted_message=encrypt(message,13)
-        self.response.write(encrypted_message)
+
+        textarea = "<textarea>" + encrypted_message + "</textarea>"
+        submit = "<input type='submit'/>"
+        form1= "<form>" + textarea + "<br>" +submit + "</form>"
+        self.response.write(form1)
 
 def encrypt(exp,pos):
     temp = ""
